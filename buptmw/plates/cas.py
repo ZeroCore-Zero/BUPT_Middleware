@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 import requests
-from urllib.parse import urlparse
 
 from ..constants import USER_AGENT, BUPT_CAS_LOGIN
 from ..utlis.auto_retry import auto_retry_network_connections
@@ -42,18 +41,6 @@ class CAS:
         }
         resp = self.session.post(url=BUPT_CAS_LOGIN, data=post_data)
         resp.raise_for_status()
-
-    # @auto_retry_network_connections
-    # def get(self, *args, **kwargs):
-    #     return self.session.get(*args, **kwargs)
-
-    # @auto_retry_network_connections
-    # def post(self, *args, **kwargs):
-    #     return self.session.post(*args, **kwargs)
-
-    # @auto_retry_network_connections
-    # def options(self, *args, **kwargs):
-    #     return self.session.options(*args, **kwargs)
 
     # redirect all undefined methods to self.session
     def __getattr__(self, name):

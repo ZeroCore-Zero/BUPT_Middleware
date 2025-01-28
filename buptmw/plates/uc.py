@@ -1,6 +1,7 @@
 from typing import Type, Optional
+from time import time
 
-from ..constants import BUPT_UC_LOGIN
+from buptmw.constants import BUPT_UC_LOGIN, BUPT_UC_CHECK
 from .cas import CAS
 
 
@@ -19,6 +20,16 @@ class UC:
 
     def _login(self):
         self.cas.get(BUPT_UC_LOGIN)
+
+    def check(self):
+        resp = self.get(
+            BUPT_UC_CHECK,
+            params={"selfTimestamp": int(time() * 1000)}
+        )
+        code = resp.json()["code"]
+        if code == 0:
+            return True
+        return False
 
     # redirect all undefined methods to self.cas
     def __getattr__(self, name):

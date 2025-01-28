@@ -3,7 +3,7 @@ from urllib.parse import urlparse, parse_qs, quote
 from base64 import b64encode
 from datetime import datetime, timedelta
 
-from ..constants import BUPT_UCLOUD_LOGIN, BUPT_UCLOUD_TOKEN, BUPT_UCLOUD_INFO, BUPT_UCLOUD_CURRENT, BUPT_UCLOUD_USER
+from buptmw.constants import BUPT_UCLOUD_LOGIN, BUPT_UCLOUD_TOKEN, BUPT_UCLOUD_INFO, BUPT_UCLOUD_CURRENT, BUPT_UCLOUD_USER, BUPT_UCLOUD_CHECK
 from .cas import CAS
 
 
@@ -19,6 +19,15 @@ class Ucloud:
             raise self.Exceptions.NeedCAS()
         self.cas = cas
         self._login()
+
+    def check(self):
+        resp = self.get(
+            BUPT_UCLOUD_CHECK,
+            headers={"blade-auth": self.access_token}
+        )
+        if resp.status_code == 200:
+            return True
+        return False
 
     def _get_cookies(self):
         info = self.cas.get(
