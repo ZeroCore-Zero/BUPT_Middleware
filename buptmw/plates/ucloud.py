@@ -3,7 +3,7 @@ from urllib.parse import urlparse, parse_qs, quote
 from base64 import b64encode
 from datetime import datetime, timedelta
 
-from buptmw.constants import BUPT_UCLOUD_LOGIN, BUPT_UCLOUD_TOKEN, BUPT_UCLOUD_INFO, BUPT_UCLOUD_CURRENT, BUPT_UCLOUD_USER, BUPT_UCLOUD_CHECK
+from buptmw.constants import UCLOUD as UcloudE
 from .cas import CAS
 
 
@@ -22,7 +22,7 @@ class Ucloud:
 
     def check(self):
         resp = self.get(
-            BUPT_UCLOUD_CHECK,
+            UcloudE.CHECK,
             headers={"blade-auth": self.access_token}
         )
         if resp.status_code == 200:
@@ -31,21 +31,21 @@ class Ucloud:
 
     def _get_cookies(self):
         info = self.cas.get(
-            BUPT_UCLOUD_INFO,
+            UcloudE.INFO,
             headers={
                 "Authorization": self.authorization,
                 "Blade-Auth": self.access_token
             }
         ).json()["data"]
         current = self.cas.get(
-            BUPT_UCLOUD_CURRENT,
+            UcloudE.CURRENT,
             headers={
                 "Authorization": self.authorization,
                 "Blade-Auth": self.access_token
             }
         ).json()["data"]
         user = self.cas.get(
-            BUPT_UCLOUD_USER,
+            UcloudE.USER,
             headers={
                 "Authorization": self.authorization,
                 "Blade-Auth": self.access_token
@@ -79,10 +79,10 @@ class Ucloud:
 
     def _login(self):
         self.authorization = "Basic " + b64encode("portal:portal_secret".encode()).decode()
-        resp = self.cas.get(BUPT_UCLOUD_LOGIN)
+        resp = self.cas.get(UcloudE.LOGIN)
         self.ticket = parse_qs(urlparse(resp.url).query)["ticket"][0]
         resp = self.cas.post(
-            BUPT_UCLOUD_TOKEN,
+            UcloudE.TOKEN,
             headers={
                 "Authorization": self.authorization,
             },

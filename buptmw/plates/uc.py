@@ -1,7 +1,7 @@
 from typing import Type, Optional
 from time import time
 
-from buptmw.constants import BUPT_UC_LOGIN, BUPT_UC_CHECK
+from buptmw.constants import UC as UCE
 from .cas import CAS
 
 
@@ -19,11 +19,11 @@ class UC:
         self._login()
 
     def _login(self):
-        self.cas.get(BUPT_UC_LOGIN)
+        self.cas.get(UCE.LOGIN)
 
     def check(self):
         resp = self.get(
-            BUPT_UC_CHECK,
+            UCE.CHECK,
             params={"selfTimestamp": int(time() * 1000)}
         )
         code = resp.json()["code"]

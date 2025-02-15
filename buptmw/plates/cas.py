@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
 
-from ..constants import USER_AGENT, BUPT_CAS_LOGIN
-from ..utlis.auto_retry import auto_retry_network_connections
+from buptmw.constants import Session, CAS as CASE
+from buptmw.utlis.auto_retry import auto_retry_network_connections
 
 
 class CAS:
@@ -21,13 +21,13 @@ class CAS:
 
     def _get_session(self):
         session = requests.Session()
-        session.headers["User-Agent"] = USER_AGENT
+        session.headers["User-Agent"] = Session.USER_AGENT
         return session
 
     @auto_retry_network_connections
     def _login(self):
         self.session = self._get_session()
-        resp = self.session.get(url=BUPT_CAS_LOGIN)
+        resp = self.session.get(url=CASE.LOGIN)
         varid = BeautifulSoup(
             resp.text, "lxml"
         ).find(attrs={"name": "execution"})["value"]
@@ -39,7 +39,7 @@ class CAS:
             "_eventId": "submit",
             "execution": varid
         }
-        resp = self.session.post(url=BUPT_CAS_LOGIN, data=post_data)
+        resp = self.session.post(url=CASE.LOGIN, data=post_data)
         resp.raise_for_status()
 
     # redirect all undefined methods to self.session
