@@ -18,6 +18,15 @@ class UC:
         self.cas = cas
         self._login()
 
+        # get personal info and store it in self.
+        resp = self.get(
+            UCE.CHECK,
+            params={"selfTimestamp": int(time() * 1000)}
+        )
+        data = resp.json()["data"]
+        self.name = data["name"]
+        self.buptid = data["schoolid"]
+
     def _login(self):
         self.cas.get(UCE.LOGIN)
 

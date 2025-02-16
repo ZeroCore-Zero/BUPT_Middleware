@@ -1,4 +1,3 @@
 from .bupt import BUPT_Auth
-from .config import ConfigItem as Config
-
+from .constants import *
 from .types import *

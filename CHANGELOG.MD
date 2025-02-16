@@ -1,3 +1,11 @@
+# 0.1.2
+
+Optimize data struct of constant.
+
+Delete unused part from init file.
+
+**[Important]** Storage some personal info while create a UC instance.
+
 # 0.1.1
 
 Add instance expires handle.
