@@ -1,24 +1,16 @@
-from typing import Type, Optional
+from typing import Optional
 from urllib.parse import urlparse, parse_qs, quote
 from base64 import b64encode
 from datetime import datetime, timedelta
 
 from buptmw.constants import UCLOUD as UcloudE
 from buptmw.plates.cas import CAS
+from buptmw.plates.template import Module_Require_CAS
 
 
-class Ucloud:
-    class Exceptions:
-        class NeedCAS(Exception):
-            def __init__(self):
-                self.message = "Need a BUPT.CAS to init."
-                super().__init__(self.message)
-
-    def __init__(self, cas: Optional[Type[CAS]] = None):
-        if cas is None or not isinstance(cas, CAS):
-            raise self.Exceptions.NeedCAS()
-        self.cas = cas
-        self._login()
+class Ucloud(Module_Require_CAS):
+    def __init__(self, cas: Optional[CAS] = None):
+        super.__init__(cas)
 
     def check(self):
         resp = self.get(
@@ -103,11 +95,3 @@ class Ucloud:
         self.dept_id = data["dept_id"]
         self.identity = f"{self.role_name}:{self.dept_id}"
         self._get_cookies()
-
-    # redirect all undefined methods to self.cas
-    def __getattr__(self, name):
-        attr = getattr(self.cas, name)
-        if callable(attr):
-            return attr.__get__(self.cas, type(self.cas))
-        else:
-            return attr
