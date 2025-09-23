@@ -1,8 +1,8 @@
 from typing import Type
 
-from .plates.cas import CAS
-from .plates.uc import UC
-from .plates.ucloud import Ucloud
+from buptmw.plates.cas import CAS
+from buptmw.plates.uc import UC
+from buptmw.plates.ucloud import Ucloud
 
 
 class BUPT_Auth:

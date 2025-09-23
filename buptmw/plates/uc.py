@@ -2,7 +2,7 @@ from typing import Type, Optional
 from time import time
 
 from buptmw.constants import UC as UCE
-from .cas import CAS
+from buptmw.plates.cas import CAS
 
 
 class UC:

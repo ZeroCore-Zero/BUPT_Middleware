@@ -4,7 +4,7 @@ from base64 import b64encode
 from datetime import datetime, timedelta
 
 from buptmw.constants import UCLOUD as UcloudE
-from .cas import CAS
+from buptmw.plates.cas import CAS
 
 
 class Ucloud:
