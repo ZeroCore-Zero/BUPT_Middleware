@@ -1,22 +1,14 @@
-from typing import Type, Optional
+from typing import Optional
 from time import time
 
 from buptmw.constants import UC as UCE
-from .cas import CAS
+from buptmw.plates.cas import CAS
+from buptmw.plates.template import Module_Require_CAS
 
 
-class UC:
-    class Exceptions:
-        class NeedCAS(Exception):
-            def __init__(self):
-                self.message = "Need a BUPT.CAS to init."
-                super().__init__(self.message)
-
-    def __init__(self, cas: Optional[Type[CAS]] = None):
-        if cas is None or not isinstance(cas, CAS):
-            raise self.Exceptions.NeedCAS()
-        self.cas = cas
-        self._login()
+class UC(Module_Require_CAS):
+    def __init__(self, cas: Optional[CAS] = None):
+        super().__init__(cas)
 
         # get personal info and store it in self.
         resp = self.get(
@@ -40,10 +32,3 @@ class UC:
             return True
         return False
 
-    # redirect all undefined methods to self.cas
-    def __getattr__(self, name):
-        attr = getattr(self.cas, name)
-        if callable(attr):
-            return attr.__get__(self.cas, type(self.cas))
-        else:
-            return attr

@@ -1,28 +1,20 @@
-from typing import Type, Optional
+from typing import Optional
 from urllib.parse import urlparse, parse_qs, quote
 from base64 import b64encode
 from datetime import datetime, timedelta
 
-from buptmw.constants import UCLOUD as UcloudE
-from .cas import CAS
+from buptmw.constants import UCLOUD as UCLOUDE
+from buptmw.plates.cas import CAS
+from buptmw.plates.template import Module_Require_CAS
 
 
-class Ucloud:
-    class Exceptions:
-        class NeedCAS(Exception):
-            def __init__(self):
-                self.message = "Need a BUPT.CAS to init."
-                super().__init__(self.message)
-
-    def __init__(self, cas: Optional[Type[CAS]] = None):
-        if cas is None or not isinstance(cas, CAS):
-            raise self.Exceptions.NeedCAS()
-        self.cas = cas
-        self._login()
+class Ucloud(Module_Require_CAS):
+    def __init__(self, cas: Optional[CAS] = None):
+        super().__init__(cas)
 
     def check(self):
         resp = self.get(
-            UcloudE.CHECK,
+            UCLOUDE.CHECK,
             headers={"blade-auth": self.access_token}
         )
         if resp.status_code == 200:
@@ -31,21 +23,21 @@ class Ucloud:
 
     def _get_cookies(self):
         info = self.cas.get(
-            UcloudE.INFO,
+            UCLOUDE.INFO,
             headers={
                 "Authorization": self.authorization,
                 "Blade-Auth": self.access_token
             }
         ).json()["data"]
         current = self.cas.get(
-            UcloudE.CURRENT,
+            UCLOUDE.CURRENT,
             headers={
                 "Authorization": self.authorization,
                 "Blade-Auth": self.access_token
             }
         ).json()["data"]
         user = self.cas.get(
-            UcloudE.USER,
+            UCLOUDE.USER,
             headers={
                 "Authorization": self.authorization,
                 "Blade-Auth": self.access_token
@@ -79,10 +71,10 @@ class Ucloud:
 
     def _login(self):
         self.authorization = "Basic " + b64encode("portal:portal_secret".encode()).decode()
-        resp = self.cas.get(UcloudE.LOGIN)
+        resp = self.cas.get(UCLOUDE.LOGIN)
         self.ticket = parse_qs(urlparse(resp.url).query)["ticket"][0]
         resp = self.cas.post(
-            UcloudE.TOKEN,
+            UCLOUDE.TOKEN,
             headers={
                 "Authorization": self.authorization,
             },
@@ -103,11 +95,3 @@ class Ucloud:
         self.dept_id = data["dept_id"]
         self.identity = f"{self.role_name}:{self.dept_id}"
         self._get_cookies()
-
-    # redirect all undefined methods to self.cas
-    def __getattr__(self, name):
-        attr = getattr(self.cas, name)
-        if callable(attr):
-            return attr.__get__(self.cas, type(self.cas))
-        else:
-            return attr
