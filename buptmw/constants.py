@@ -21,3 +21,9 @@ class UCLOUD(StrEnum):
     CURRENT = "https://apiucloud.bupt.edu.cn/ykt-site/base-term/current"
     USER = "https://apiucloud.bupt.edu.cn/ykt-basics/userroledomaindept/listByUserId"
     CHECK = "https://apiucloud.bupt.edu.cn/blade-portal/home-page-info/getShufflingWebList"
+
+
+class ELEC(StrEnum):
+    LOGIN = "https://app.bupt.edu.cn/buptdf/wap/default/chong"
+    CHECK = "https://app.bupt.edu.cn/buptdf/wap/default/chong"
+    SEARCH = "https://app.bupt.edu.cn/buptdf/wap/default/search"

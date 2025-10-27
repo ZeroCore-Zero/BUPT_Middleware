@@ -3,6 +3,7 @@ from typing import Type
 from buptmw.plates.cas import CAS
 from buptmw.plates.uc import UC
 from buptmw.plates.ucloud import Ucloud
+from buptmw.plates.elec import Elec
 
 
 class BUPT_Auth:
@@ -10,7 +11,8 @@ class BUPT_Auth:
         self._plates_instance = {}
         self._plates_map = {
             "UC": UC,
-            "Ucloud": Ucloud
+            "Ucloud": Ucloud,
+            "Elec": Elec
         }
         if cas is not None:
             self.cas = CAS(cas["username"], cas["password"])
@@ -21,8 +23,11 @@ class BUPT_Auth:
             self._plates_instance[label] = plate(cas=self.cas)
         return self._plates_instance[label]
 
-    def get_UC(self) -> Type[UC]:
+    def get_UC(self) -> UC:
         return self._get_instance("UC")
 
-    def get_Ucloud(self) -> Type[Ucloud]:
+    def get_Ucloud(self) -> Ucloud:
         return self._get_instance("Ucloud")
+
+    def get_Elec(self) -> Elec:
+        return self._get_instance("Elec")

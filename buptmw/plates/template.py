@@ -24,7 +24,7 @@ class Module_Require_CAS(ABC):
         pass
 
     @abstractmethod
-    def check(self):
+    def check(self) -> bool:
         """ Check if session expired. """
         pass
 

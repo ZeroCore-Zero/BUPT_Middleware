@@ -1,8 +1,0 @@
-# For develop
-build
-twine
-
-# For package
-requests
-beautifulsoup4
-lxml

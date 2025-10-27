@@ -4,19 +4,18 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "BUPTmw"
-version = "0.1.2"
+version = "0.1.3"
 authors = [
     {name = "ZeroCore", email = "esetting@hotmail.com"}
 ]
 description = "Help BUPT students access school system with python."
 keywords = ["BUPT"]
 readme = "README.MD"
-license = {text = "GPL-3.0-or-later"}
+license = "GPL-3.0-or-later"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Intended Audience :: Education",
-    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
     "Programming Language :: Cython",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
@@ -35,3 +34,9 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/ZeroCore-Zero/BUPT_Middleware"
+
+[dependency-groups]
+dev = [
+    "build>=1.3.0",
+    "twine>=6.2.0",
+]
