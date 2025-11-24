@@ -1,3 +1,15 @@
+# 0.1.4
+
+Fix: ucloud login parameters.
+
+# 0.1.3
+
+Develop and build with uv.
+
+Refactor and optimizing project structure.
+
+**NEW**: Electric api
+
 # 0.1.2
 
 Optimize data struct of constant.
