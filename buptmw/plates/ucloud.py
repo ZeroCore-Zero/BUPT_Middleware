@@ -87,11 +87,11 @@ class Ucloud(Module_Require_CAS):
         self.user_id = data["user_id"]
         self.access_token = data["access_token"]
         self.refresh_token = data["refresh_token"]
-        self.role_name = data["role_name"]
+        self.role_name = data["currentRole"]
         self.loginId = data["loginId"]
         self.user_name = data["user_name"]
         self.real_name = data["real_name"]
         self.avatar = data["avatar"]
-        self.dept_id = data["dept_id"]
+        self.dept_id = data.get("dept_id", "undefinded")
         self.identity = f"{self.role_name}:{self.dept_id}"
         self._get_cookies()
