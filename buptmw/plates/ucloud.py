@@ -5,44 +5,18 @@ from datetime import datetime, timedelta
 
 from buptmw.constants import UCLOUD as UCLOUDE
 from buptmw.plates.cas import CAS
-from buptmw.plates.template import Module_Require_CAS
+from buptmw.plates.template import Module_CAS
 
 
-class Ucloud(Module_Require_CAS):
+class Ucloud(Module_CAS):
     def __init__(self, cas: Optional[CAS] = None):
         super().__init__(cas)
-
-    def check(self):
-        resp = self.get(
-            UCLOUDE.CHECK,
-            headers={"blade-auth": self.access_token}
-        )
-        if resp.status_code == 200:
-            return True
-        return False
+        self._login()
 
     def _get_cookies(self):
-        info = self.cas.get(
-            UCLOUDE.INFO,
-            headers={
-                "Authorization": self.authorization,
-                "Blade-Auth": self.access_token
-            }
-        ).json()["data"]
-        current = self.cas.get(
-            UCLOUDE.CURRENT,
-            headers={
-                "Authorization": self.authorization,
-                "Blade-Auth": self.access_token
-            }
-        ).json()["data"]
-        user = self.cas.get(
-            UCLOUDE.USER,
-            headers={
-                "Authorization": self.authorization,
-                "Blade-Auth": self.access_token
-            }
-        ).json()["data"]
+        info = self.get(UCLOUDE.INFO).json()["data"]
+        current = self.get(UCLOUDE.CURRENT).json()["data"]
+        user = self.get(UCLOUDE.USER).json()["data"]
 
         cookies = {}
         cookies["iClass-uuid"] = self.user_id
@@ -61,29 +35,27 @@ class Ucloud(Module_Require_CAS):
         cookies["iClass-login-roles"] = quote(str(user))
 
         for cookie in cookies:
-            self.cas.session.cookies.set(
+            self.cookies.set(
                 name=cookie,
                 value=cookies[cookie],
                 domain="ucloud.bupt.edu.cn",
                 expires=(datetime.now() + timedelta(hours=1)).timestamp()
             )
-        pass
 
     def _login(self):
-        self.authorization = "Basic " + b64encode("portal:portal_secret".encode()).decode()
-        resp = self.cas.get(UCLOUDE.LOGIN)
+        self.headers["Authorization"] = "Basic " + b64encode("portal:portal_secret".encode()).decode()
+        resp = self.get(UCLOUDE.LOGIN)
+
         self.ticket = parse_qs(urlparse(resp.url).query)["ticket"][0]
-        resp = self.cas.post(
+        resp = self.post(
             UCLOUDE.TOKEN,
-            headers={
-                "Authorization": self.authorization,
-            },
             data={
                 "ticket": self.ticket,
                 "grant_type": "third"
             }
         )
         data = resp.json()
+        
         self.user_id = data["user_id"]
         self.access_token = data["access_token"]
         self.refresh_token = data["refresh_token"]
@@ -94,4 +66,6 @@ class Ucloud(Module_Require_CAS):
         self.avatar = data["avatar"]
         self.dept_id = data.get("dept_id", "undefinded")
         self.identity = f"{self.role_name}:{self.dept_id}"
+
+        self.headers["Blade-Auth"] = self.access_token
         self._get_cookies()
