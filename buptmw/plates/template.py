@@ -22,10 +22,10 @@ class Module(Session, ABC):
 class Module_CAS(Module):
     def __init__(self, cas: "CAS" = None):
         from buptmw.plates.cas import CAS
-        from buptmw.plates.exception import RequireCAS
+        from buptmw.exception import RequireCASInstance
     
         if not isinstance(cas, CAS):
-            raise RequireCAS()
+            raise RequireCASInstance()
         super().__init__()
         
         # Copy headers and cookies

@@ -8,7 +8,7 @@ from buptmw.plates.cas import CAS
 from buptmw.plates.template import Module_CAS
 
 
-class Ucloud(Module_CAS):
+class UCloud(Module_CAS):
     def __init__(self, cas: Optional[CAS] = None):
         super().__init__(cas)
         self._login()

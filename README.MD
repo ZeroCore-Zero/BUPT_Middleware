@@ -1,15 +1,15 @@
 # BUPT_Middleware
 
-This project aims to help BUPT students simply access school systems with python, without multifarious process.
+This project aims to help BUPT students simply access school systems with python, without authentication process manually.
 
 ## Ability
 
 - Access [CAS](https://auth.bupt.edu.cn/authserver/login)
   - Access [UC](https://uc.bupt.edu.cn/#/user/pc/index)
-  - Access [Ucloud](https://ucloud.bupt.edu.cn/)
+  - Access [UCloud](https://ucloud.bupt.edu.cn/)
   - Access [Electric](https://app.bupt.edu.cn/buptdf/wap/default/chong/)
 
-## Download
+## Install
 
 ``` bash
 pip install buptmw
@@ -17,29 +17,33 @@ pip install buptmw
 
 ## Usage
 
-Before start, you need to pass your **BUPT credential**, which was used in [CAS](https://auth.bupt.edu.cn/authserver/login) to the core class, e.g.
+Before start, pass your **BUPT Credential** that you needed, which was used in below sites:
+
+1. [CAS](https://auth.bupt.edu.cn/authserver/login)
+
+to the `BUPT_Auth`.
 
 ``` python
-from buptmw import BUPT_Auth
+from buptmw import BUPT_Auth, CAS_Credential
 
-auth = {
+auth: CAS_Credential = {
     "username": "yourUsername",
     "password": "yourPassword"
 }
 user = BUPT_Auth(cas=auth)
 ```
 
-Then you can call several method to get a verified entity, which you can use it as a `requests.Session`, and any additional operation like tiresome authentication can be omitted for you. For example,
+Then you can call methods like `get_xxx` to get a verified entity, which you can use it as a `requests.Session`, and any tiresome authentication can be omitted for you.
 
 ``` python
-from buptmw import BUPT_Auth
+from buptmw import BUPT_Auth, CAS_Credential
 
-auth = {
+auth: CAS_Credential = {
     "username": "yourUsername",
     "password": "yourPassword"
 }
 user = BUPT_Auth(cas=auth)
-ucloud = user.get_Ucloud()
+ucloud = user.get_UCloud()
 response = ucloud.get("https://someurl")
 # do something with response
 ```
