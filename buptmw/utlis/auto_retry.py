@@ -10,7 +10,7 @@ def auto_retry_network_connections(func):
                 return func(*args, **kwargs)
             except RequestException as e:
                 print(f"{time + 1}th Network connection failed with an exception: {e}")
-                if time < MAX_TIMES:
+                if time < MAX_TIMES - 1:
                     print("Retrying...")
                     sleep(1)
                 else:
