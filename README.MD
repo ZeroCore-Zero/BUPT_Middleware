@@ -1,5 +1,7 @@
 # BUPT_Middleware
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/ZeroCore-Zero/BUPT_Middleware)
+
 This project aims to help BUPT students simply access school systems with python, without authentication process manually.
 
 ## Ability
