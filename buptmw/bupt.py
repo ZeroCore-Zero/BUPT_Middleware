@@ -1,33 +1,42 @@
-from typing import Type
+from typing import TypedDict
+
 
 from buptmw.plates.cas import CAS
 from buptmw.plates.uc import UC
-from buptmw.plates.ucloud import Ucloud
-from buptmw.plates.elec import Elec
+from buptmw.plates.ucloud import UCloud
+from buptmw.plates.elec import Electric
+from buptmw.exception import RequireCASCredential
+
+
+class CAS_Credential(TypedDict):
+    username: str | int
+    password: str
 
 
 class BUPT_Auth:
-    def __init__(self, cas=None):
-        self._plates_instance = {}
-        self._plates_map = {
-            "UC": UC,
-            "Ucloud": Ucloud,
-            "Elec": Elec
-        }
+    def __init__(self, cas: CAS_Credential = None):
+        self.cas_credential: CAS_Credential = None
+        self.login_CAS(cas)
+    
+    def login_CAS(self, cas: CAS_Credential = None):
         if cas is not None:
-            self.cas = CAS(cas["username"], cas["password"])
+            self.cas_credential = cas
 
-    def _get_instance(self, label):
-        plate = self._plates_map[label]
-        if label not in self._plates_instance or not self._plates_instance[label].check():
-            self._plates_instance[label] = plate(cas=self.cas)
-        return self._plates_instance[label]
+        if self.cas_credential is None:
+            raise RequireCASCredential
+        self.cas = CAS(cas["username"], cas["password"])
 
     def get_UC(self) -> UC:
-        return self._get_instance("UC")
+        if not self.cas.check():
+            self.login_CAS()
+        return UC(self.cas)
 
-    def get_Ucloud(self) -> Ucloud:
-        return self._get_instance("Ucloud")
+    def get_UCloud(self) -> UCloud:
+        if not self.cas.check():
+            self.login_CAS()
+        return UCloud(self.cas)
 
-    def get_Elec(self) -> Elec:
-        return self._get_instance("Elec")
+    def get_Electric(self) -> Electric:
+        if not self.cas.check():
+            self.login_CAS()
+        return Electric(self.cas)
