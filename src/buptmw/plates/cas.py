@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 from buptmw.plates.template import Module
 from buptmw.constants import CAS as CASE
-from buptmw.utlis.auto_retry import auto_retry_network_connections
+from buptmw.utils.auto_retry import auto_retry_network_connections
 
 
 class CAS(Module):
