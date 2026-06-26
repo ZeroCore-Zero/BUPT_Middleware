@@ -1,22 +1,21 @@
-from typing import Optional
 from urllib.parse import urlparse, parse_qs, quote
 from base64 import b64encode
 from datetime import datetime, timedelta
 
-from buptmw.constants import UCLOUD as UCLOUDE
+from buptapis import BUPTAPI
 from buptmw.plates.cas import CAS
 from buptmw.plates.template import Module_CAS
 
 
 class UCloud(Module_CAS):
-    def __init__(self, cas: Optional[CAS] = None):
+    def __init__(self, cas: CAS):
         super().__init__(cas)
         self._login()
 
     def _get_cookies(self):
-        info = self.get(UCLOUDE.INFO).json()["data"]
-        current = self.get(UCLOUDE.CURRENT).json()["data"]
-        user = self.get(UCLOUDE.USER).json()["data"]
+        info = self.get(BUPTAPI.UCLOUD.INFO).json()["data"]
+        current = self.get(BUPTAPI.UCLOUD.CURRENT).json()["data"]
+        user = self.get(BUPTAPI.UCLOUD.USER).json()["data"]
 
         cookies = {}
         cookies["iClass-uuid"] = self.user_id
@@ -44,11 +43,11 @@ class UCloud(Module_CAS):
 
     def _login(self):
         self.headers["Authorization"] = "Basic " + b64encode("portal:portal_secret".encode()).decode()
-        resp = self.get(UCLOUDE.LOGIN)
+        resp = self.get(BUPTAPI.UCLOUD.LOGIN)
 
         self.ticket = parse_qs(urlparse(resp.url).query)["ticket"][0]
         resp = self.post(
-            UCLOUDE.TOKEN,
+            BUPTAPI.UCLOUD.TOKEN,
             data={
                 "ticket": self.ticket,
                 "grant_type": "third"

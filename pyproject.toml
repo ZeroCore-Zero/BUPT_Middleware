@@ -31,11 +31,7 @@ dependencies = [
     "beautifulsoup4>=4.13.5",
     "lxml>=6.0.2",
     "ddddocr>=1.5.6",
-]
-
-[dependency-groups]
-dev = [
-    "hatch>=1.17.0",
+    "buptapis>=0.2.0",
 ]
 
 [project.urls]
