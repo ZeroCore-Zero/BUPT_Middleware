@@ -1,7 +1,11 @@
 __pycache__
-.vscode
-test
 
-BUPTmw.egg-info
-build
-dist
+# developing
+/.vscode/
+/.venv/
+/.env
+/.pytest_cache/
+
+# building
+/build/
+/dist/
