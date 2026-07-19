@@ -12,3 +12,20 @@ def test_app_academic(config: Config):
     auth = AcademicAuth(cred)
     app = Academic(auth)
     assert app.check()
+
+
+def test_app_academic_without_authclass(config: Config):
+    cred = AcademicCredential(
+        username=config.academic_username,
+        password=config.academic_password
+    )
+    app = Academic(cred)
+    assert app.check()
+
+
+def test_app_academic_without_authclass_and_credclass(config: Config):
+    app = Academic({
+        "username": config.academic_username,
+        "password": config.academic_password
+    })
+    assert app.check()

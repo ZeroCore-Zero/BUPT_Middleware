@@ -12,3 +12,20 @@ def test_app_electric(config: Config):
     auth = CASAuth(cred)
     app = Electric(auth)
     assert app.check()
+
+
+def test_app_electric_without_authclass(config: Config):
+    cred = CASCredential(
+        username=config.cas_username,
+        password=config.cas_password
+    )
+    app = Electric(cred)
+    assert app.check()
+
+
+def test_app_electric_without_authclass_and_credclass(config: Config):
+    app = Electric({
+        "username": config.cas_username,
+        "password": config.cas_password
+    })
+    assert app.check()

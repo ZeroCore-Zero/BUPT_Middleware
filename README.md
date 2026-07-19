@@ -20,6 +20,12 @@ pip install buptmw
 
 ## Usage
 
+> [!IMPORTANT]
+>
+> Always use `get_client()` to obtain the client before making requests. It will automatically check and refresh the session if it has expired.
+
+### Normal Using
+
 Follow the **Credential**->**Auth**->**App** layout chain, and call `get_client()` to get a verified `httpx.Client`, which you can use to make requests. Any tiresome authentication can be omitted for you.
 
 ``` python
@@ -34,6 +40,18 @@ response = client.get("https://someurl")
 # do something with response
 ```
 
-> [!IMPORTANT]
-> 
-> Always use `get_client()` to obtain the client before making requests. It will automatically check and refresh the session if it has expired.
+### Quick Using
+
+Directly pass credentials to apps.
+
+``` python
+from buptmw import CASAuth, UCloud
+cred = CASCredential(username="yourUsername", password="yourPassword")
+app = UCloud(cred)
+# or directly use dict
+app = UCloud({"username": "yourUsername", "password": "yourPassword"})
+
+client = app.get_client()
+response = client.get("https://someurl")
+# do something with response
+```

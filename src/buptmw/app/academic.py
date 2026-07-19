@@ -2,10 +2,11 @@ from buptapis import BUPTAPI
 
 from buptmw.app._base import BaseApp
 from buptmw.auth.academic import AcademicAuth
+from buptmw.credential.academic import AcademicCredential
 
 
 class Academic(BaseApp[AcademicAuth]):
-    def __init__(self, auth: AcademicAuth) -> None:
+    def __init__(self, auth: AcademicAuth | AcademicCredential | dict) -> None:
         super().__init__(auth)
         self.login()
 

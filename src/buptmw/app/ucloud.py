@@ -7,6 +7,7 @@ from buptapis import BUPTAPI
 
 from buptmw.app._base import BaseApp
 from buptmw.auth.cas import CASAuth
+from buptmw.credential.cas import CASCredential
 
 
 class UCloud(BaseApp[CASAuth]):
@@ -21,7 +22,7 @@ class UCloud(BaseApp[CASAuth]):
     dept_id: str
     identity: str
 
-    def __init__(self, auth: CASAuth) -> None:
+    def __init__(self, auth: CASAuth | CASCredential | dict) -> None:
         super().__init__(auth)
         self.login()
 
