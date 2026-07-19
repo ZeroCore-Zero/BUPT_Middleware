@@ -12,3 +12,21 @@ def test_app_uc(config: Config):
     auth = CASAuth(cred)
     app = UC(auth)
     assert app.check()
+
+
+def test_app_uc_without_authclass(config: Config):
+    cred = CASCredential(
+        username=config.cas_username,
+        password=config.cas_password
+    )
+    app = UC(cred)
+    assert app.check()
+
+
+def test_app_uc_without_authclass_and_credclass(config: Config):
+    app = UC({
+        "username": config.cas_username,
+        "password": config.cas_password
+    })
+    assert app.check()
+

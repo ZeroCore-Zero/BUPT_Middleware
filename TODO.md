@@ -1,16 +1,5 @@
 # ToDo List
 
-## App Fast Creating
-
-Creating App without Auth or Auth&Credential previously.
-
-``` python
-from buptmw import AcademicCredential, Academic
-
-app = Academic(AcademicCredential())
-app = Academic({"username": "xxx", "password": "xxx"})
-```
-
 ## Cookie Credential
 
 Supporting creating of Credential with cookies without session-keepalive feature.
